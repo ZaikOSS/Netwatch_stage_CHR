@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NETWATCH Admin Settings</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#a9bad3",
+                        "primary": "#b4c5ff",
+                        "on-surface-variant": "#c3c6d7",
+                        "outline": "#8d90a0",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "primary-fixed": "#dbe1ff",
+                        "primary-container": "#2563eb",
+                        "inverse-primary": "#0053db",
+                        "error": "#ffb4ab",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-error": "#690005",
+                        "secondary": "#b7c8e1",
+                        "surface": "#11131b",
+                        "on-tertiary-container": "#ffede6",
+                        "on-tertiary": "#581e00",
+                        "inverse-surface": "#e1e2ed",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "on-secondary": "#213145",
+                        "surface-dim": "#11131b",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "secondary-container": "#3a4a5f",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "surface-container": "#1d1f27",
+                        "surface-container-low": "#191b23",
+                        "tertiary": "#ffb596",
+                        "surface-container-high": "#282a32",
+                        "inverse-on-surface": "#2e3039",
+                        "on-primary-fixed": "#00174b",
+                        "on-surface": "#e1e2ed",
+                        "background": "#11131b",
+                        "on-primary-container": "#eeefff",
+                        "on-tertiary-fixed": "#360f00",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "error-container": "#93000a",
+                        "tertiary-fixed": "#ffdbcd",
+                        "surface-container-lowest": "#0c0e16",
+                        "on-background": "#e1e2ed",
+                        "surface-tint": "#b4c5ff",
+                        "surface-container-highest": "#32343d",
+                        "outline-variant": "#434655",
+                        "on-error-container": "#ffdad6",
+                        "surface-variant": "#32343d",
+                        "tertiary-container": "#bc4800",
+                        "on-primary": "#002a78",
+                        "on-secondary-fixed": "#0b1c30",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "surface-bright": "#373942"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "gutter": "16px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "base": "4px",
+                        "margin": "24px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "code-md": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "code-md": ["13px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "title-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar (Shared Component implementation) -->
+<header class="fixed top-0 left-0 w-full h-12 bg-surface dark:bg-surface border-b border-outline-variant z-50">
+<div class="flex justify-between items-center px-md w-full max-w-[1600px] mx-auto h-full">
+<!-- Left Side: Brand & Links -->
+<div class="flex items-center h-full gap-lg">
+<div class="flex items-center gap-sm">
+<span class="font-display-lg text-display-lg font-bold tracking-tighter text-primary truncate" style="font-size: 20px; line-height: 24px;">NETWATCH</span>
+<span class="font-code-md text-code-md text-outline-variant">// CONSOLE</span>
+</div>
+<!-- Nav Links -->
+<nav class="hidden md:flex h-full ml-lg">
+<a class="text-on-surface-variant font-medium h-full flex items-center px-4 hover:bg-surface-container-high transition-colors duration-150 cursor-pointer active:opacity-80" href="#">
+                        Network Map
+                    </a>
+<a class="text-primary border-b-2 border-primary font-bold h-full flex items-center px-4 hover:bg-surface-container-high transition-colors duration-150 cursor-pointer active:opacity-80 bg-surface-container-low" href="#">
+                        Admin Settings
+                    </a>
+</nav>
+</div>
+<!-- Right Side: Search, Actions, Profile -->
+<div class="flex items-center gap-md h-full">
+<!-- Search (on_left relative to actions) -->
+<div class="relative hidden lg:block h-8">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline-variant" style="font-size: 16px;">search</span>
+<input class="h-full bg-background border border-outline-variant text-on-surface font-code-md text-code-md pl-xl pr-sm rounded-DEFAULT focus:outline-none focus:border-primary-container placeholder:text-outline w-48" placeholder="Search node..." type="text"/>
+</div>
+<!-- Trailing Icons -->
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center p-xs">
+<span class="material-symbols-outlined" style="font-size: 20px;">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center p-xs">
+<span class="material-symbols-outlined" style="font-size: 20px;">settings</span>
+</button>
+<div class="w-px h-6 bg-outline-variant mx-xs"></div>
+<!-- Profile -->
+<div class="flex items-center gap-sm cursor-pointer hover:opacity-80 transition-opacity">
+<div class="flex flex-col items-end">
+<span class="font-label-caps text-label-caps text-primary">ADMIN_TECHNICIAN</span>
+<span class="font-code-md text-code-md text-outline" style="font-size: 10px;">[Logout]</span>
+</div>
+<img alt="Administrator Profile" class="w-8 h-8 rounded-full border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMK5pyMynftZrOv8YIAvpfyLHlKM4TlcxL73UmQseyoVPmodkyA0CNx8yRNLquOqcRTBPb77aK8MRMdngnFxbMI5_uazXFQCTDE3BdJPht4B7CrkM4cMk067-2CO8uO04x4IBzzCmXSMBxehdQDtGwOGWHAJgiKoV2pii4TSXlsWXoKGThaP2ZBs3zs6NbYxqcL3e9rWg5EOSnLgZ3phhuHKJmdS9vssYDEGDJAK1vPTnJwp4AT9AECWLiLaQIyB7XuPEjTs4i9b4"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Workspace -->
+<main class="flex-1 flex mt-12 w-full max-w-[1600px] mx-auto pb-8"> <!-- pb-8 for bottom bar -->
+<!-- Left Sidebar (20%) -->
+<aside class="hidden md:flex flex-col w-1/5 border-r border-outline-variant bg-surface-container pt-md h-[calc(100vh-3rem)] sticky top-12">
+<nav class="flex flex-col gap-xs px-sm">
+<!-- Selected Item -->
+<a class="flex items-center gap-sm px-sm py-sm border-l-2 border-primary bg-secondary-container text-primary hover:bg-surface-container-highest transition-all duration-75 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px;">inventory_2</span>
+<span class="font-body-md font-medium">Asset Inventory (CRUD)</span>
+</a>
+<!-- Unselected Item -->
+<a class="flex items-center gap-sm px-sm py-sm text-on-surface-variant hover:bg-surface-container-highest transition-all duration-75 active:scale-[0.99] border-l-2 border-transparent" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px;">admin_panel_settings</span>
+<span class="font-body-md">Access Control &amp; Credits</span>
+</a>
+</nav>
+</aside>
+<!-- Right Workspace (80%) -->
+<section class="w-full md:w-4/5 p-lg flex flex-col gap-lg overflow-y-auto">
+<!-- Header Area -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-md border-b border-outline-variant pb-md">
+<div>
+<h1 class="font-headline-md text-headline-md text-primary">Equipment Inventory Control</h1>
+<p class="font-code-md text-code-md text-on-surface-variant mt-xs">Manage network topologies, assign IPs, and define link parents.</p>
+</div>
+<button class="bg-primary-container text-on-primary-container font-body-md font-medium px-md py-sm rounded-DEFAULT flex items-center gap-xs hover:bg-inverse-primary transition-colors border border-transparent whitespace-nowrap">
+<span class="material-symbols-outlined" style="font-size: 18px;">add</span>
+                    Add New Equipment
+                </button>
+</div>
+<!-- "Add Node" Form -->
+<div class="bg-surface-container border border-dashed border-outline-variant rounded-DEFAULT p-md flex flex-col gap-md relative">
+<div class="absolute top-0 right-0 p-xs bg-outline-variant text-background font-label-caps text-label-caps px-sm rounded-bl-DEFAULT">FORM: ADD_NODE</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md items-end pt-sm">
+<!-- Input: Name -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant">EQUIPMENT NAME</label>
+<input class="bg-background border border-outline-variant text-on-surface font-code-md text-code-md px-sm py-sm rounded-DEFAULT focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container placeholder:text-outline w-full" placeholder="e.g., SW-GASTRO" type="text"/>
+</div>
+<!-- Input: IP -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant">IP ADDRESS</label>
+<input class="bg-background border border-outline-variant text-on-surface font-code-md text-code-md px-sm py-sm rounded-DEFAULT focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container placeholder:text-outline w-full" placeholder="e.g., 10.121.64.13" type="text"/>
+</div>
+<!-- Dropdown: Type -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant">ICON TYPE</label>
+<div class="relative">
+<select class="bg-background border border-outline-variant text-on-surface font-code-md text-code-md px-sm py-sm rounded-DEFAULT focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container appearance-none w-full cursor-pointer">
+<option value="switch">Switch</option>
+<option value="router">Router</option>
+<option value="firewall">Firewall</option>
+<option value="server">Server</option>
+<option value="pc">PC</option>
+</select>
+<span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 text-outline-variant pointer-events-none" style="font-size: 16px;">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Data Table -->
+<div class="bg-surface-container border border-outline-variant rounded-DEFAULT overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm whitespace-nowrap">
+<thead class="bg-surface-container-high border-b border-outline-variant">
+<tr>
+<th class="font-label-caps text-label-caps text-on-surface-variant px-md py-sm">EQUIPMENT NAME</th>
+<th class="font-label-caps text-label-caps text-on-surface-variant px-md py-sm">IP ADDRESS</th>
+<th class="font-label-caps text-label-caps text-on-surface-variant px-md py-sm">ICON TYPE</th>
+<th class="font-label-caps text-label-caps text-on-surface-variant px-md py-sm">DEPENDENCY / LINK PARENT</th>
+<th class="font-label-caps text-label-caps text-on-surface-variant px-md py-sm text-right">ACTIONS</th>
+</tr>
+</thead>
+<tbody class="font-code-md text-code-md">
+<!-- Row 1 -->
+<tr class="border-b border-outline-variant hover:bg-surface-container-high transition-colors">
+<td class="px-md py-[10px] text-primary flex items-center gap-xs">
+<span class="material-symbols-outlined text-outline-variant" style="font-size: 14px;">router</span>
+                                    SW CORE GHASSANI
+                                </td>
+<td class="px-md py-[10px] text-on-surface">10.121.64.3</td>
+<td class="px-md py-[10px] text-on-surface-variant">Core Switch</td>
+<td class="px-md py-[10px] text-on-surface-variant"><span class="bg-surface-variant text-on-surface px-xs py-[2px] rounded-sm text-[11px] uppercase tracking-wider">Backbone Root</span></td>
+<td class="px-md py-[10px] text-right">
+<div class="flex items-center justify-end gap-sm">
+<button class="text-primary hover:text-primary-fixed transition-colors text-[12px] uppercase font-bold tracking-wider">Edit</button>
+<button class="text-error hover:text-on-error-container transition-colors text-[12px] uppercase font-bold tracking-wider">Delete</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="border-b border-outline-variant hover:bg-surface-container-high transition-colors">
+<td class="px-md py-[10px] text-primary flex items-center gap-xs">
+<span class="material-symbols-outlined text-outline-variant" style="font-size: 14px;">hub</span>
+                                    SW-DIALYSE
+                                </td>
+<td class="px-md py-[10px] text-on-surface">10.121.64.11</td>
+<td class="px-md py-[10px] text-on-surface-variant">Edge Switch</td>
+<td class="px-md py-[10px] text-on-surface-variant">SW CORE GHASSANI</td>
+<td class="px-md py-[10px] text-right">
+<div class="flex items-center justify-end gap-sm">
+<button class="text-primary hover:text-primary-fixed transition-colors text-[12px] uppercase font-bold tracking-wider">Edit</button>
+<button class="text-error hover:text-on-error-container transition-colors text-[12px] uppercase font-bold tracking-wider">Delete</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-md py-[10px] text-primary flex items-center gap-xs">
+<span class="material-symbols-outlined text-outline-variant" style="font-size: 14px;">security</span>
+                                    Fortinet
+                                </td>
+<td class="px-md py-[10px] text-on-surface">10.121.64.X</td>
+<td class="px-md py-[10px] text-on-surface-variant">Firewall</td>
+<td class="px-md py-[10px] text-on-surface-variant">Streamcore Link</td>
+<td class="px-md py-[10px] text-right">
+<div class="flex items-center justify-end gap-sm">
+<button class="text-primary hover:text-primary-fixed transition-colors text-[12px] uppercase font-bold tracking-wider">Edit</button>
+<button class="text-error hover:text-on-error-container transition-colors text-[12px] uppercase font-bold tracking-wider">Delete</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Table Pagination / Status (Optional detail for high-end feel) -->
+<div class="flex justify-between items-center text-on-surface-variant font-code-md text-[11px] px-xs">
+<span>Showing 3 of 142 total assets</span>
+<div class="flex gap-xs">
+<button class="px-sm py-xs border border-outline-variant rounded-sm hover:bg-surface-container-high disabled:opacity-50" disabled="">&lt; Prev</button>
+<button class="px-sm py-xs border border-outline-variant rounded-sm bg-surface-container-high text-on-surface">1</button>
+<button class="px-sm py-xs border border-outline-variant rounded-sm hover:bg-surface-container-high">2</button>
+<button class="px-sm py-xs border border-outline-variant rounded-sm hover:bg-surface-container-high">Next &gt;</button>
+</div>
+</div><div class="flex flex-col sm:flex-row sm:items-center justify-between gap-md border-b border-outline-variant pb-md mt-xl">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary">Network Topology Connections</h2>
+<p class="font-code-md text-code-md text-on-surface-variant mt-xs">Define and manage logical and physical links between devices.</p>
+</div>
+<button class="bg-primary-container text-on-primary-container font-body-md font-medium px-md py-sm rounded-DEFAULT flex items-center gap-xs hover:bg-inverse-primary transition-colors border border-transparent whitespace-nowrap">
+<span class="material-symbols-outlined" style="font-size: 18px;">link</span>
+        Create New Link
+    </button>
+</div>
+<div class="bg-surface-container border border-dashed border-outline-variant rounded-DEFAULT p-md flex flex-col gap-md relative">
+<div class="absolute top-0 right-0 p-xs bg-outline-variant text-background font-label-caps text-label-caps px-sm rounded-bl-DEFAULT">FORM: CREATE_LINK</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md items-end pt-sm">
+<div class="flex flex-col gap-xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant">SOURCE DEVICE</label>
+<div class="relative">
+<select class="bg-background border border-outline-variant text-on-surface font-code-md text-code-md px-sm py-sm rounded-DEFAULT focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container appearance-none w-full cursor-pointer">
+<option value="sw-core">SW CORE GHASSANI</option>
+<option value="sw-dialyse">SW-DIALYSE</option>
+</select>
+<span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 text-outline-variant pointer-events-none" style="font-size: 16px;">expand_more</span>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant">TARGET DEVICE</label>
+<div class="relative">
+<select class="bg-background border border-outline-variant text-on-surface font-code-md text-code-md px-sm py-sm rounded-DEFAULT focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container appearance-none w-full cursor-pointer">
+<option value="sw-reanimation">SW-REANIMATION</option>
+<option value="sw-scaner">SW-SCANER</option>
+</select>
+<span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 text-outline-variant pointer-events-none" style="font-size: 16px;">expand_more</span>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant">LINK TYPE</label>
+<div class="relative">
+<select class="bg-background border border-outline-variant text-on-surface font-code-md text-code-md px-sm py-sm rounded-DEFAULT focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container appearance-none w-full cursor-pointer">
+<option value="backbone">Backbone</option>
+<option value="fiber">Fiber</option>
+<option value="copper">Copper</option>
+<option value="virtual">Virtual</option>
+</select>
+<span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 text-outline-variant pointer-events-none" style="font-size: 16px;">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container border border-outline-variant rounded-DEFAULT overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm whitespace-nowrap">
+<thead class="bg-surface-container-high border-b border-outline-variant">
+<tr>
+<th class="font-label-caps text-label-caps text-on-surface-variant px-md py-sm">SOURCE</th>
+<th class="font-label-caps text-label-caps text-on-surface-variant px-md py-sm">TARGET</th>
+<th class="font-label-caps text-label-caps text-on-surface-variant px-md py-sm">LINK TYPE</th>
+<th class="font-label-caps text-label-caps text-on-surface-variant px-md py-sm">STATUS</th>
+<th class="font-label-caps text-label-caps text-on-surface-variant px-md py-sm text-right">ACTIONS</th>
+</tr>
+</thead>
+<tbody class="font-code-md text-code-md">
+<tr class="border-b border-outline-variant hover:bg-surface-container-high transition-colors">
+<td class="px-md py-[10px] text-primary">SW CORE GHASSANI</td>
+<td class="px-md py-[10px] text-on-surface">SW-SCANER</td>
+<td class="px-md py-[10px] text-on-surface-variant">Fiber</td>
+<td class="px-md py-[10px]"><span class="text-primary text-[11px] font-bold uppercase tracking-wider">ACTIVE</span></td>
+<td class="px-md py-[10px] text-right">
+<div class="flex items-center justify-end gap-sm">
+<button class="text-primary hover:text-primary-fixed transition-colors text-[12px] uppercase font-bold tracking-wider">Edit</button>
+<button class="text-error hover:text-on-error-container transition-colors text-[12px] uppercase font-bold tracking-wider">Delete</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-md py-[10px] text-primary">SW CORE GHASSANI</td>
+<td class="px-md py-[10px] text-on-surface">SW-REANIMATION</td>
+<td class="px-md py-[10px] text-on-surface-variant">Copper</td>
+<td class="px-md py-[10px]"><span class="bg-error text-on-error px-xs py-[2px] rounded-sm text-[11px] uppercase font-bold tracking-wider">DOWN</span></td>
+<td class="px-md py-[10px] text-right">
+<div class="flex items-center justify-end gap-sm">
+<button class="text-primary hover:text-primary-fixed transition-colors text-[12px] uppercase font-bold tracking-wider">Edit</button>
+<button class="text-error hover:text-on-error-container transition-colors text-[12px] uppercase font-bold tracking-wider">Delete</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Utility Bar -->
+<footer class="fixed bottom-0 left-0 w-full h-8 bg-surface-container border-t border-outline-variant z-50 flex items-center px-md">
+<div class="w-full max-w-[1600px] mx-auto flex justify-between items-center font-code-md text-[11px] text-outline-variant">
+<div class="flex items-center gap-sm">
+<span class="w-2 h-2 rounded-full bg-primary opacity-80 animate-pulse"></span>
+<span>Active database connection: /database/network.sqlite</span>
+<span class="mx-sm">|</span>
+<span>Mode: Read/Write</span>
+</div>
+<div class="hidden sm:block">
+                SYS_TIME: <span id="sys-time">00:00:00 UTC</span>
+</div>
+</div>
+</footer>
+<script>
+        // Simple script for the bottom bar clock to enhance the "Command Center" feel
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toISOString().split('T')[1].split('.')[0] + ' UTC';
+            const clockEl = document.getElementById('sys-time');
+            if(clockEl) clockEl.textContent = timeString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body></html>

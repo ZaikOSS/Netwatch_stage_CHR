@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NETWATCH // MONITORING CONSOLE</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "tertiary-container": "#bc4800",
+                "surface-bright": "#373942",
+                "inverse-surface": "#e1e2ed",
+                "primary": "#b4c5ff",
+                "on-tertiary-fixed": "#360f00",
+                "on-primary-fixed": "#00174b",
+                "surface-container-lowest": "#0c0e16",
+                "secondary-fixed": "#d3e4fe",
+                "error-container": "#93000a",
+                "surface-container-high": "#282a32",
+                "secondary-fixed-dim": "#b7c8e1",
+                "error": "#ffb4ab",
+                "tertiary": "#ffb596",
+                "surface-container": "#1d1f27",
+                "on-secondary": "#213145",
+                "on-background": "#e1e2ed",
+                "on-secondary-fixed-variant": "#38485d",
+                "on-secondary-container": "#a9bad3",
+                "surface-dim": "#11131b",
+                "on-tertiary": "#581e00",
+                "on-error-container": "#ffdad6",
+                "surface-variant": "#32343d",
+                "tertiary-fixed-dim": "#ffb596",
+                "on-surface": "#e1e2ed",
+                "primary-container": "#2563eb",
+                "outline": "#8d90a0",
+                "on-primary": "#002a78",
+                "inverse-on-surface": "#2e3039",
+                "outline-variant": "#434655",
+                "on-error": "#690005",
+                "surface-container-low": "#191b23",
+                "background": "#11131b",
+                "on-secondary-fixed": "#0b1c30",
+                "on-surface-variant": "#c3c6d7",
+                "primary-fixed-dim": "#b4c5ff",
+                "inverse-primary": "#0053db",
+                "secondary": "#b7c8e1",
+                "on-tertiary-container": "#ffede6",
+                "surface-container-highest": "#32343d",
+                "surface": "#11131b",
+                "on-tertiary-fixed-variant": "#7d2d00",
+                "on-primary-fixed-variant": "#003ea8",
+                "on-primary-container": "#eeefff",
+                "secondary-container": "#3a4a5f",
+                "tertiary-fixed": "#ffdbcd",
+                "surface-tint": "#b4c5ff",
+                "primary-fixed": "#dbe1ff"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+        },
+        "spacing": {
+                "xl": "32px",
+                "sm": "8px",
+                "lg": "24px",
+                "xs": "4px",
+                "md": "16px",
+                "gutter": "16px",
+                "margin": "24px",
+                "base": "4px"
+        },
+        "fontFamily": {
+                "label-caps": [
+                        "Inter"
+                ],
+                "headline-md": [
+                        "Inter"
+                ],
+                "display-lg": [
+                        "Inter"
+                ],
+                "title-sm": [
+                        "Inter"
+                ],
+                "body-sm": [
+                        "Inter"
+                ],
+                "body-md": [
+                        "Inter"
+                ],
+                "code-md": [
+                        "JetBrains Mono"
+                ]
+        },
+        "fontSize": {
+                "label-caps": [
+                        "11px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "headline-md": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "display-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "title-sm": [
+                        "18px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "code-md": [
+                        "13px",
+                        {
+                                "lineHeight": "20px",
+                                "fontWeight": "400"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+  /* Custom Utilities for strict enterprise aesthetic */
+  body { background-color: #0f172a; color: #e1e2ed; }
+  .surface-1 { background-color: #1e293b; border: 1px solid #334155; }
+  .surface-2 { background-color: #334155; }
+  .border-standard { border: 1px solid #334155; }
+  
+  /* Grid pattern for the canvas */
+  .bg-grid-pattern {
+      background-size: 40px 40px;
+      background-image: linear-gradient(to right, #1e293b 1px, transparent 1px),
+                        linear-gradient(to bottom, #1e293b 1px, transparent 1px);
+  }
+
+  /* Topology Lines */
+  .topo-link-solid { stroke: #22c55e; stroke-width: 2; fill: none; }
+  .topo-link-dashed { stroke: #ef4444; stroke-width: 2; stroke-dasharray: 5, 5; fill: none; animation: dash 1s linear infinite; }
+  
+  @keyframes dash {
+    to {
+      stroke-dashoffset: -10;
+    }
+  }
+
+  /* Blinking dot */
+  @keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.2; }
+    100% { opacity: 1; }
+  }
+  .animate-blink { animation: blink 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+  
+  /* No rounded shapes overide */
+  * { border-radius: 2px !important; }
+</style>
+</head>
+<body class="h-screen flex flex-col font-body-md overflow-hidden bg-[#0f172a]">
+<!-- TopNavBar (Shared Component Translation) -->
+<header class="bg-surface-container dark:bg-surface-container border-b border-outline-variant dark:border-outline-variant flex justify-between items-center px-margin py-sm w-full z-50 sticky top-0 flat no shadows text-primary dark:text-primary">
+<!-- Left: Brand & Status Badge -->
+<div class="flex items-center gap-md">
+<div class="font-display-lg text-display-lg font-black tracking-tighter text-primary dark:text-primary flex items-center gap-xs">
+<span>NETWATCH</span>
+<span class="text-on-surface-variant text-[16px] font-normal tracking-normal ml-2 mr-4">// CONSOLE</span>
+</div>
+<div class="bg-green-900/30 border border-green-500/50 text-green-400 font-label-caps text-label-caps px-2 py-1 flex items-center gap-2">
+<span class="w-2 h-2 bg-green-500 rounded-full inline-block animate-blink"></span>
+        LIVE REFRESH: EVERY 5S
+      </div>
+</div>
+<!-- Center: Navigation (Topology is Active based on JSON) -->
+<nav class="hidden md:flex gap-lg h-full items-end font-label-caps text-label-caps">
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary transition-colors duration-150 cursor-pointer active:opacity-80 py-2" href="#">Dashboard</a>
+<a class="text-primary dark:text-primary border-b-2 border-primary pb-1 cursor-pointer active:opacity-80 py-2" href="#">Topology</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary transition-colors duration-150 cursor-pointer active:opacity-80 py-2" href="#">Logs</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary transition-colors duration-150 cursor-pointer active:opacity-80 py-2" href="#">Alerts</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary transition-colors duration-150 cursor-pointer active:opacity-80 py-2" href="#">Devices</a>
+</nav>
+<!-- Right: Account & Actions -->
+<div class="flex items-center gap-md font-code-md text-code-md">
+<div class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">person</span>
+<span>admin_technician</span>
+</div>
+<div class="w-px h-4 bg-outline-variant"></div>
+<button class="flex items-center gap-xs hover:text-primary transition-colors duration-150">
+        Refresh
+        <span class="material-symbols-outlined text-[16px]">refresh</span>
+</button>
+<div class="w-px h-4 bg-outline-variant"></div>
+<button class="hover:text-primary transition-colors duration-150 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+</button>
+<button class="hover:text-primary transition-colors duration-150 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">notifications</span>
+</button>
+<button class="ml-2 text-error hover:text-error-container transition-colors duration-150 font-label-caps text-label-caps">
+        [Logout]
+      </button>
+</div>
+</header>
+<!-- Metrics Header -->
+<div class="w-full flex gap-md p-md border-b border-standard bg-[#0f172a]">
+<!-- Card 1 -->
+<div class="surface-1 flex-1 p-md flex flex-col justify-center">
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-1">TOTAL EQUIPMENT</div>
+<div class="font-headline-md text-headline-md text-on-surface">22 Nodes</div>
+</div>
+<!-- Card 2 -->
+<div class="surface-1 flex-1 p-md flex flex-col justify-center border-l-4 border-l-green-500">
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-1">OPERATIONAL STATUS</div>
+<div class="font-headline-md text-headline-md text-green-400">21 Online</div>
+</div>
+<!-- Card 3 -->
+<div class="surface-1 flex-1 p-md flex flex-col justify-center border-l-4 border-l-red-500">
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-1">CRITICAL ALERTS</div>
+<div class="font-headline-md text-headline-md text-red-500">1 Down</div>
+</div>
+</div>
+<!-- Main Layout Split -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Left Sidebar (25%) -->
+<aside class="w-1/4 surface-1 border-r-0 flex flex-col">
+<div class="p-3 border-b border-standard bg-surface-variant font-label-caps text-label-caps flex justify-between items-center">
+<span>DEVICE DIRECTORY</span>
+<span class="material-symbols-outlined text-[16px]">filter_list</span>
+</div>
+<!-- Search Input -->
+<div class="p-2 border-b border-standard">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2 top-1.5 text-on-surface-variant text-[16px]">search</span>
+<input class="w-full bg-[#0f172a] border border-standard text-on-surface font-code-md text-code-md py-1 pl-8 pr-2 focus:border-primary-container focus:outline-none placeholder-on-surface-variant" placeholder="Filter by IP or Name..." type="text"/>
+</div>
+</div>
+<!-- Device List -->
+<div class="flex-1 overflow-y-auto">
+<ul class="font-code-md text-code-md divide-y divide-[#334155]">
+<!-- Item 1 -->
+<li class="p-3 hover:bg-surface-variant cursor-pointer flex justify-between items-center group">
+<div>
+<div class="text-on-surface group-hover:text-primary transition-colors">SW CORE GHASSANI</div>
+<div class="text-on-surface-variant text-[11px] mt-1">10.121.64.3</div>
+</div>
+<div class="w-2 h-2 bg-green-500"></div>
+</li>
+<!-- Item 2 -->
+<li class="p-3 hover:bg-surface-variant cursor-pointer flex justify-between items-center group">
+<div>
+<div class="text-on-surface group-hover:text-primary transition-colors">SW-DIALYSE</div>
+<div class="text-on-surface-variant text-[11px] mt-1">10.121.64.11</div>
+</div>
+<div class="w-2 h-2 bg-green-500"></div>
+</li>
+<!-- Item 3 (Critical) -->
+<li class="p-3 bg-red-900/20 border-l-2 border-red-500 cursor-pointer flex justify-between items-center">
+<div>
+<div class="text-red-400 font-bold">SW-REANIMATION</div>
+<div class="text-red-400/70 text-[11px] mt-1">10.121.64.20</div>
+</div>
+<div class="w-2 h-2 bg-red-500 animate-blink"></div>
+</li>
+<!-- Mock additional items for scroll -->
+<li class="p-3 hover:bg-surface-variant cursor-pointer flex justify-between items-center group">
+<div>
+<div class="text-on-surface group-hover:text-primary transition-colors">SW-SCANER</div>
+<div class="text-on-surface-variant text-[11px] mt-1">10.121.64.10</div>
+</div>
+<div class="w-2 h-2 bg-green-500"></div>
+</li>
+<li class="p-3 hover:bg-surface-variant cursor-pointer flex justify-between items-center group">
+<div>
+<div class="text-on-surface group-hover:text-primary transition-colors">SW-MATERNITE</div>
+<div class="text-on-surface-variant text-[11px] mt-1">10.121.64.15</div>
+</div>
+<div class="w-2 h-2 bg-green-500"></div>
+</li>
+</ul>
+</div>
+</aside>
+<!-- Main Canvas (75%) -->
+<main class="w-3/4 relative bg-grid-pattern overflow-hidden">
+<!-- Canvas Controls -->
+<div class="absolute top-4 right-4 flex gap-xs z-10">
+<button class="surface-1 p-2 hover:bg-surface-variant text-on-surface-variant transition-colors border-standard">
+<span class="material-symbols-outlined text-[18px]" data-weight="fill">zoom_in</span>
+</button>
+<button class="surface-1 p-2 hover:bg-surface-variant text-on-surface-variant transition-colors border-standard">
+<span class="material-symbols-outlined text-[18px]" data-weight="fill">zoom_out</span>
+</button>
+<button class="surface-1 p-2 hover:bg-surface-variant text-on-surface-variant transition-colors border-standard">
+<span class="material-symbols-outlined text-[18px]" data-weight="fill">center_focus_strong</span>
+</button>
+</div>
+<!-- SVG Topology Layer -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 1;">
+<!-- Line to SCANER -->
+<line class="topo-link-solid" x1="50%" x2="30%" y1="50%" y2="25%"></line>
+<!-- Line to MATERNITE -->
+<line class="topo-link-solid" x1="50%" x2="70%" y1="50%" y2="30%"></line>
+<!-- Line to REANIMATION (Dashed Red) -->
+<line class="topo-link-dashed" x1="50%" x2="65%" y1="50%" y2="75%"></line>
+</svg>
+<!-- Topology Nodes Layer (HTML Overlays) -->
+<div class="absolute inset-0 w-full h-full" style="z-index: 2;">
+<!-- Central Node: CORE -->
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer">
+<div class="surface-1 p-3 border-2 border-primary shadow-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-[32px] text-primary">router</span>
+</div>
+<div class="mt-2 bg-[#0f172a] border border-standard px-2 py-1 text-center">
+<div class="font-label-caps text-label-caps text-primary">SW CORE GHASSANI</div>
+<div class="font-code-md text-[10px] text-on-surface-variant">10.121.64.3</div>
+</div>
+</div>
+<!-- Node: SCANER -->
+<div class="absolute top-[25%] left-[30%] transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer hover:-translate-y-[calc(50%+2px)] transition-transform">
+<div class="surface-1 p-2 border border-green-500 flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px] text-green-400">dns</span>
+</div>
+<div class="mt-2 bg-[#0f172a] border border-standard px-2 py-1 text-center">
+<div class="font-label-caps text-label-caps text-on-surface">SW-SCANER</div>
+<div class="font-code-md text-[10px] text-on-surface-variant">10.121.64.10</div>
+</div>
+</div>
+<!-- Node: MATERNITE -->
+<div class="absolute top-[30%] left-[70%] transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer hover:-translate-y-[calc(50%+2px)] transition-transform">
+<div class="surface-1 p-2 border border-green-500 flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px] text-green-400">dns</span>
+</div>
+<div class="mt-2 bg-[#0f172a] border border-standard px-2 py-1 text-center">
+<div class="font-label-caps text-label-caps text-on-surface">SW-MATERNITE</div>
+<div class="font-code-md text-[10px] text-on-surface-variant">10.121.64.15</div>
+</div>
+</div>
+<!-- Node: REANIMATION (Critical) -->
+<div class="absolute top-[75%] left-[65%] transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+<!-- The Node Box itself -->
+<div class="bg-red-600 p-2 border-2 border-red-400 flex items-center justify-center shadow-[0_0_15px_rgba(220,38,38,0.5)] animate-pulse relative z-10">
+<span class="material-symbols-outlined text-[24px] text-white" data-weight="fill">warning</span>
+</div>
+<div class="mt-2 bg-red-950 border border-red-500 px-2 py-1 text-center z-10">
+<div class="font-label-caps text-label-caps text-red-100">SW-REANIMATION</div>
+<div class="font-code-md text-[10px] text-red-300">10.121.64.20</div>
+</div>
+<!-- Interactive Tooltip Overlay pointing to Reanimation -->
+<div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-4 w-64 surface-1 border-standard shadow-xl z-50">
+<!-- Tooltip Arrow (Simulated with borders) -->
+<div class="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-[#334155]"></div>
+<div class="absolute top-full left-1/2 transform -translate-x-1/2 -mt-[1px] w-0 h-0 border-l-[7px] border-l-transparent border-r-[7px] border-r-transparent border-t-[7px] border-t-[#1e293b]"></div>
+<div class="bg-red-900/30 border-b border-standard px-3 py-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-red-400">troubleshoot</span>
+<span class="font-label-caps text-label-caps text-on-surface">DEVICE DIAGNOSTICS</span>
+</div>
+<div class="p-3 font-code-md text-[11px] leading-relaxed text-on-surface-variant flex flex-col gap-1">
+<div class="flex justify-between border-b border-standard/50 pb-1">
+<span>IP:</span> <span class="text-on-surface">10.121.64.20</span>
+</div>
+<div class="flex justify-between border-b border-standard/50 py-1">
+<span>Type:</span> <span class="text-on-surface">Edge Switch</span>
+</div>
+<div class="flex justify-between border-b border-standard/50 py-1">
+<span>Last Ping:</span> <span class="text-red-400">3 mins ago</span>
+</div>
+<div class="flex justify-between pt-1 font-bold">
+<span>Packet Loss:</span> <span class="text-red-500">100%</span>
+</div>
+</div>
+<div class="p-2 border-t border-standard bg-[#0f172a]">
+<button class="w-full bg-[#2563eb] hover:bg-blue-500 text-white font-label-caps text-[10px] py-1.5 transition-colors border border-blue-400 uppercase">
+                Force Manual Ping Now
+              </button>
+</div>
+</div>
+<!-- End Tooltip -->
+</div>
+</div>
+</main>
+</div>
+<!-- Footer (Shared Component Translation - Reduced prominence to keep focus on Canvas) -->
+<footer class="bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant dark:border-outline-variant flat no shadows flex justify-between items-center px-margin py-xs w-full mt-auto text-secondary dark:text-secondary font-code-md text-code-md">
+<div class="font-label-caps text-label-caps">v4.2.1-stable | SYSTEM ONLINE</div>
+<div class="flex gap-md">
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary transition-all duration-200" href="#">Status Page</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary transition-all duration-200" href="#">API Docs</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary transition-all duration-200" href="#">Support</a>
+</div>
+</footer>
+</body></html>
