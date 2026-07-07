@@ -4,7 +4,7 @@ const path = require('path');
 const bcrypt = require('bcryptjs');
 
 // Path to the database file
-const dbPath = path.resolve(__dirname, '../../database/network.sqlite');
+const dbPath = process.env.DB_PATH || path.resolve(__dirname, '../../database/network.sqlite');
 
 let dbInstance = null;
 
