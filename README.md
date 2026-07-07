@@ -81,45 +81,31 @@ Netwatch_stage_CHR/
 
 ---
 
-## ⚙️ Getting Started
+## ⚙️ Getting Started (Docker Installation)
+
+The application has been fully containerized. You can run the entire stack (Frontend, Backend, and Database) with a single command.
 
 ### Prerequisites
-Make sure you have [Node.js](https://nodejs.org/) installed (LTS version recommended).
+Make sure you have [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed.
 
-### 1. Backend Setup
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Create a `.env` file in the `backend/` root directory and specify the server port and your JWT secret:
-   ```env
-   PORT=5000
-   JWT_SECRET=your_secure_jwt_secret_key_here
-   ```
-4. Start the backend server:
-   ```bash
-   node server.js
-   ```
-   The backend server will run on `http://localhost:5000`. The first run will automatically create the SQLite database in `database/network.sqlite` and seed default administrative user credentials if they do not exist.
+### 1. Configuration
+Create a `.env` file in the `backend/` directory and specify your JWT secret:
+```env
+JWT_SECRET=your_secure_jwt_secret_key_here
+```
 
-### 2. Frontend Setup
-1. Navigate to the frontend directory:
-   ```bash
-   cd ../frontend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Run the development server:
-   ```bash
-   npm run dev
-   ```
-   The frontend will run on `http://localhost:5173`. Open your browser and navigate to this address.
+### 2. Launch the Application
+Run the following command at the root of the project:
+```bash
+docker compose up -d
+```
+The first run will automatically build the images, create the SQLite database in the `database/` folder (which is mounted as a persistent volume), and seed default administrative user credentials.
+
+### 3. Access the Dashboard
+Open your browser and navigate to:
+* **`http://localhost`** (or `http://YOUR_SERVER_IP` to access from another PC on the network).
+
+*(Note: The frontend container includes an Nginx reverse proxy that automatically routes `/api` traffic to the backend, eliminating CORS issues and making the application fully portable across your local network).*
 
 ---
 
