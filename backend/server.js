@@ -10,6 +10,7 @@ const userRoutes = require('./routes/userRoutes');
 const deviceRoutes = require('./routes/deviceRoutes');
 const linkRoutes = require('./routes/linkRoutes');
 const engineRoutes = require('./routes/engineRoutes');
+const logRoutes = require('./routes/logRoutes');
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/devices', deviceRoutes);
 app.use('/api/links', linkRoutes);
 app.use('/api/engine', engineRoutes);
+app.use('/api/logs', logRoutes);
 
 const PORT = process.env.PORT || 5000;
 
