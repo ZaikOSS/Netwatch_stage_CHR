@@ -4,6 +4,7 @@ import { AuthContext } from './AuthContext';
 import Login from './components/Login';
 import NetworkMap from './components/NetworkMap';
 import AdminControls from './components/AdminControls';
+import PingLogs from './components/PingLogs';
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -12,6 +13,10 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={user ? <NetworkMap /> : <Login />} />
+        <Route 
+          path="/logs" 
+          element={user ? <PingLogs /> : <Navigate to="/" replace />} 
+        />
         <Route 
           path="/admin" 
           element={user && user.role === 'admin' ? <AdminControls /> : <Navigate to="/" replace />} 

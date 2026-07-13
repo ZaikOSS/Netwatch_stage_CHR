@@ -49,6 +49,15 @@ function Navbar({ engineStatus, fetchData }) {
             Topology Map
           </div>
         </a>
+        <a 
+          onClick={() => navigate('/logs')} 
+          className={`px-4 py-2 cursor-pointer transition-colors duration-200 rounded-t-md border-b-2 ${location.pathname === '/logs' ? 'bg-[#1e293b] text-primary border-primary' : 'bg-transparent text-on-surface-variant border-transparent hover:bg-[#1e293b] hover:text-primary'}`}
+        >
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-[16px]">history</span>
+            Ping Logs
+          </div>
+        </a>
         {user?.role === 'admin' && (
           <a 
             onClick={() => navigate('/admin')} 

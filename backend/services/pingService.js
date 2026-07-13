@@ -90,24 +90,36 @@ class PingEngine {
   }
 
   async pingAndUpdate(id, ipAddress) {
+    let status = 'down';
+    let alive = false;
+    const db = await getDb();
+
     try {
       const res = await ping.promise.probe(ipAddress, { timeout: 2 });
-      const status = res.alive ? 'up' : 'down';
-      
-      const db = await getDb();
-      if (res.alive) {
-        await db.run('UPDATE devices SET status = ?, last_seen = CURRENT_TIMESTAMP WHERE id = ?', [status, id]);
-      } else {
-        await db.run('UPDATE devices SET status = ? WHERE id = ?', [status, id]);
-      }
-      
-      return { id, ip_address: ipAddress, status, alive: res.alive };
+      alive = res.alive;
+      status = alive ? 'up' : 'down';
     } catch (error) {
       console.error(`Error pinging device ${id} (${ipAddress}):`, error);
-      const db = await getDb();
-      await db.run('UPDATE devices SET status = ? WHERE id = ?', ['down', id]);
-      return { id, ip_address: ipAddress, status: 'down', alive: false };
+      // status defaults to 'down' on error
     }
+
+    // Check previous status
+    const prevDevice = await db.get('SELECT status FROM devices WHERE id = ?', [id]);
+    const prevStatus = prevDevice ? prevDevice.status : null;
+
+    // Log the event if the status has changed
+    if (prevStatus !== status) {
+      await db.run('INSERT INTO device_logs (device_id, status) VALUES (?, ?)', [id, status]);
+    }
+
+    // Update the current device record
+    if (alive) {
+      await db.run('UPDATE devices SET status = ?, last_seen = CURRENT_TIMESTAMP WHERE id = ?', [status, id]);
+    } else {
+      await db.run('UPDATE devices SET status = ? WHERE id = ?', [status, id]);
+    }
+
+    return { id, ip_address: ipAddress, status, alive };
   }
 
   async pingAll() {
