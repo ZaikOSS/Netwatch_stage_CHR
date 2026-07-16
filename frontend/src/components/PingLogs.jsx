@@ -7,9 +7,16 @@ function PingLogs() {
   const [loading, setLoading] = useState(true);
   const [engineStatus, setEngineStatus] = useState(null);
   const [sysTime, setSysTime] = useState('');
+  
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    fetchLogs();
+    fetchLogs(currentPage);
+  }, [currentPage]);
+
+  useEffect(() => {
     fetchEngineStatus();
     
     const timeInterval = setInterval(() => {
@@ -20,11 +27,12 @@ function PingLogs() {
     return () => clearInterval(timeInterval);
   }, []);
 
-  const fetchLogs = async () => {
+  const fetchLogs = async (page = 1) => {
     setLoading(true);
     try {
-      const response = await api.get('/logs');
-      setLogs(response.data);
+      const response = await api.get(`/logs?page=${page}&limit=20`);
+      setLogs(response.data.logs || []);
+      setTotalPages(response.data.totalPages || 1);
     } catch (error) {
       console.error('Failed to fetch logs', error);
     } finally {
@@ -41,36 +49,65 @@ function PingLogs() {
     }
   };
 
-  const handleExportCSV = () => {
-    const csvRows = [];
-    csvRows.push(['Timestamp', 'Device Name', 'IP Address', 'Event'].join(','));
+  const handleExportCSV = async () => {
+    try {
+      // Fetch ALL logs for export
+      const response = await api.get('/logs?export=true');
+      const allLogs = response.data.logs || [];
+      
+      const csvRows = [];
+      csvRows.push(['Timestamp', 'Device Name', 'IP Address', 'Event'].join(','));
+      
+      allLogs.forEach(log => {
+        const event = log.status === 'up' ? 'Came Online' : 'Went Offline';
+        csvRows.push([
+          `"${new Date(log.timestamp).toLocaleString()}"`, 
+          `"${log.device_name}"`, 
+          log.ip_address, 
+          event
+        ].join(','));
+      });
+      
+      const blob = new Blob([csvRows.join('\n')], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('hidden', '');
+      a.setAttribute('href', url);
+      a.setAttribute('download', 'ping_logs.csv');
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Failed to export CSV', error);
+    }
+  };
+
+  const getPageNumbers = () => {
+    const pages = [];
+    let start = Math.max(1, currentPage - 2);
+    let end = Math.min(totalPages, currentPage + 2);
     
-    logs.forEach(log => {
-      const event = log.status === 'up' ? 'Came Online' : 'Went Offline';
-      csvRows.push([
-        `"${new Date(log.timestamp).toLocaleString()}"`, 
-        `"${log.device_name}"`, 
-        log.ip_address, 
-        event
-      ].join(','));
-    });
+    if (start > 1) {
+      pages.push(1);
+      if (start > 2) pages.push('...');
+    }
     
-    const blob = new Blob([csvRows.join('\n')], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.setAttribute('hidden', '');
-    a.setAttribute('href', url);
-    a.setAttribute('download', 'ping_logs.csv');
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    
+    if (end < totalPages) {
+      if (end < totalPages - 1) pages.push('...');
+      pages.push(totalPages);
+    }
+    return pages;
   };
 
   return (
     <div className="bg-[#0f172a] text-[#e1e2ed] font-body-md min-h-screen flex flex-col antialiased">
-      <Navbar engineStatus={engineStatus} fetchData={fetchLogs} />
+      <Navbar engineStatus={engineStatus} fetchData={() => fetchLogs(currentPage)} />
 
-      <main className="flex-1 w-full max-w-6xl mx-auto p-lg flex flex-col gap-lg overflow-y-auto pb-16">
+      <main className="flex-1 w-full max-w-6xl mx-auto p-lg flex flex-col gap-lg overflow-y-auto pb-24">
         
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-md border-b border-[#434655] pb-md mt-sm">
           <div>
@@ -78,18 +115,18 @@ function PingLogs() {
             <p className="font-code-md text-code-md text-on-surface-variant mt-xs">Track precisely when devices go offline and come back online.</p>
           </div>
           <div className="flex gap-4 items-center">
-            <button onClick={fetchLogs} className="bg-[#334155] hover:bg-[#475569] text-white px-3 py-1.5 rounded transition-colors flex items-center gap-2 font-label-caps text-label-caps border border-[#334155]">
+            <button onClick={() => fetchLogs(currentPage)} className="bg-[#334155] hover:bg-[#475569] text-white px-3 py-1.5 rounded transition-colors flex items-center gap-2 font-label-caps text-label-caps border border-[#334155]">
               <span className="material-symbols-outlined text-[18px]">refresh</span> Refresh
             </button>
             <button onClick={handleExportCSV} className="bg-green-600 hover:bg-green-700 text-white font-body-md px-md py-[6px] rounded flex items-center gap-xs transition-colors">
               <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>download</span>
-              Export CSV
+              Export Full CSV
             </button>
           </div>
         </div>
 
-        <div className="bg-[#1e293b] border border-[#334155] rounded overflow-hidden shadow-lg mb-8">
-          <div className="overflow-x-auto">
+        <div className="bg-[#1e293b] border border-[#334155] rounded overflow-hidden shadow-lg">
+          <div className="overflow-x-auto min-h-[400px]">
             {loading ? (
               <div className="p-8 text-center text-on-surface-variant animate-pulse font-code-md">Loading logs...</div>
             ) : logs.length === 0 ? (
@@ -132,6 +169,46 @@ function PingLogs() {
               </table>
             )}
           </div>
+          
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="bg-[#0f172a] border-t border-[#334155] p-4 flex justify-between items-center text-sm">
+              <button 
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="px-3 py-1 bg-[#1e293b] text-[#e1e2ed] border border-[#334155] rounded hover:bg-[#334155] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                Previous
+              </button>
+              
+              <div className="flex gap-1">
+                {getPageNumbers().map((num, i) => (
+                  <button
+                    key={i}
+                    onClick={() => num !== '...' && setCurrentPage(num)}
+                    disabled={num === '...'}
+                    className={`px-3 py-1 rounded border transition-colors ${
+                      num === currentPage 
+                        ? 'bg-primary border-primary text-white font-bold' 
+                        : num === '...' 
+                          ? 'bg-transparent border-transparent text-on-surface-variant cursor-default'
+                          : 'bg-[#1e293b] border-[#334155] text-on-surface hover:bg-[#334155]'
+                    }`}
+                  >
+                    {num}
+                  </button>
+                ))}
+              </div>
+
+              <button 
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 bg-[#1e293b] text-[#e1e2ed] border border-[#334155] rounded hover:bg-[#334155] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </main>
 
