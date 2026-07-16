@@ -110,6 +110,14 @@ class PingEngine {
     // Log the event if the status has changed
     if (prevStatus !== status) {
       await db.run('INSERT INTO device_logs (device_id, status) VALUES (?, ?)', [id, status]);
+      
+      // Enforce 1000 log max limit by pruning older logs
+      await db.run(`
+        DELETE FROM device_logs 
+        WHERE id NOT IN (
+          SELECT id FROM device_logs ORDER BY timestamp DESC LIMIT 1000
+        )
+      `);
     }
 
     // Update the current device record
